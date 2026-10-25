@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ScrapJaeger – lokales Scrapling-Dashboard</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header>
+  <div>
+    <h1>ScrapJaeger</h1>
+    <p class="sub">Lokal · Scrapling-Engine · Ad-hoc + Verlauf (V1) · Crawl/Jobs folgen</p>
+  </div>
+  <nav>
+    <button id="tab-scrape" class="active">Scrape</button>
+    <button id="tab-history">Verlauf</button>
+    <button id="tab-roadmap">Crawl / Jobs (V2/V3)</button>
+  </nav>
+</header>
+<main>
+<section id="view-scrape">
+  <form id="f">
+    <input id="url" type="url" required placeholder="https://example.com/produkt" autocomplete="off">
+    <input id="sel" type="text" placeholder="CSS-Selector, z. B. .product (leer = ganze Seite)">
+    <select id="seltype" title="Selector-Typ">
+      <option value="css">CSS</option>
+      <option value="xpath">XPath</option>
+      <option value="text">Text</option>
+    </select>
+    <select id="fetcher" title="Fetcher">
+      <option value="auto">Auto (http→stealthy→dynamic)</option>
+      <option value="http">HTTP (schnell)</option>
+      <option value="stealthy">Stealthy (Cloudflare)</option>
+      <option value="dynamic">Dynamic (Browser-Automation)</option>
+    </select>
+    <button type="submit" id="go">Scrapen</button>
+  </form>
+  <div id="status" class="mut"></div>
+  <div class="row">
+    <input id="filter" type="text" placeholder="Ergebnisse filtern …">
+    <span id="count" class="mut"></span>
+    <span class="sp"></span>
+    <button id="exp-json" type="button">JSON</button>
+    <button id="exp-csv" type="button">CSV</button>
+  </div>
+  <table>
+    <thead><tr><th>#</th><th>Tag</th><th>Text</th><th>Link</th><th>Fetcher</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+  <div id="errs" class="mut"></div>
+</section>
+<section id="view-history" class="hidden">
+  <div class="row">
+    <input id="hq" type="text" placeholder="Verlauf filtern (URL/Selector) …">
+    <button id="hgo">Filtern</button>
+    <a class="btn" href="/api/history/export?format=csv">CSV</a>
+    <a class="btn" href="/api/history/export?format=json">JSON</a>
+  </div>
+  <table>
+    <thead><tr><th>ID</th><th>Zeit</th><th>URL</th><th>Selector</th><th>Treffer</th><th>Dauer</th><th>Fehler</th></tr></thead>
+    <tbody id="hrows"></tbody>
+  </table>
+  <div id="detail" class="hidden card"></div>
+</section>
+<section id="view-roadmap" class="hidden">
+  <div class="card">
+    <h3>V2 – Crawl (reserviert)</h3>
+    <p class="mut">Start-URL + max. Seiten + Link-Folgen via Scrapling-Spider. API: <code>GET /api/crawl</code> gibt bereits den V2-Hinweis zurück, DB-Tabelle <code>crawls</code> existiert.</p>
+  </div>
+  <div class="card">
+    <h3>V3 – Monitoring (reserviert)</h3>
+    <p class="mut">Zeitplan + Änderungserkennung. API: <code>GET /api/jobs</code>, DB-Tabelle <code>jobs</code> existiert. Kein Scheduler in V1 (YAGNI).</p>
+  </div>
+</section>
+</main>
+<script src="app.js"></script>
+</body>
+</html>
