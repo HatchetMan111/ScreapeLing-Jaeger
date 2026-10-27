@@ -1,5 +1,8 @@
 fastapi==0.115.6
 uvicorn[standard]==0.34.0
 scrapling[fetchers,all]==0.3.9
+# scrapling 0.3.9 ruft "camoufox fetch --browserforge" auf; camoufox 0.5.x
+# hat die Option entfernt (Parser-Fehler "No such option"). Deshalb hart pinnen.
+camoufox>=0.4.11,<0.5
 python-dotenv==1.0.1
 apscheduler==3.10.4

@@ -212,9 +212,16 @@ echo "==> [CT] Scrapling-Browser (Chromium) passend zur installierten Version"
 export PLAYWRIGHT_BROWSERS_PATH="/opt/$APP/ms-playwright"
 mkdir -p "$PLAYWRIGHT_BROWSERS_PATH"
 if ! (cd app && /opt/$APP/venv/bin/scrapling install); then
-  echo "[CT] Fallback: scrapling.cli.install()"
-  /opt/$APP/venv/bin/python -c "from scrapling.cli import install; install([], standalone_mode=False)"
+  echo "[CT] Fallback: Browser einzeln installieren"
+  /opt/$APP/venv/bin/python -m playwright install --with-deps chromium
+  /opt/$APP/venv/bin/python -m patchright install chromium
+  /opt/$APP/venv/bin/python -m camoufox fetch --browserforge
 fi
+/opt/$APP/venv/bin/python - <<'PYCHECK'
+from importlib.metadata import version
+from scrapling.fetchers import Fetcher, StealthyFetcher, DynamicFetcher
+print("scrapling+browser deps ok | camoufox", version("camoufox"))
+PYCHECK
 chown -R "$APP:$APP" "/opt/$APP"
 unset PLAYWRIGHT_BROWSERS_PATH
 
